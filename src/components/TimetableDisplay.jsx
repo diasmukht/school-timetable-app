@@ -1,24 +1,25 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Clock, Calendar, Sun, Moon, Loader2 } from 'lucide-react'
 
-// --- ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ С NPOINT.IO ---
-const DATA_URL = 'https://api.npoint.io/ВАШ_ID_СЮДА'; 
+// ВАША ССЫЛКА (Точно как вы прислали)
+const DATA_URL = 'https://api.npoint.io/6bc04583502766e44c7a'; 
 
 const TimetableDisplay = () => {
-  // Состояния данных
+  // --- Состояния данных ---
   const [classes, setClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Состояния интерфейса
+  // --- Состояния интерфейса ---
   const [currentShift, setCurrentShift] = useState('morning') 
   const [currentStartIndex, setCurrentStartIndex] = useState(0)
   const [currentDay, setCurrentDay] = useState(0)
   const [currentTime, setCurrentTime] = useState(new Date())
 
-  // Дни для поиска в JSON
+  // Дни для поиска в JSON (должны совпадать с ключами в базе)
   const dataDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  // Дни для отображения (Казахский)
+  
+  // Дни для отображения на экране (Казахский)
   const displayDays = ['Дүйсенбі', 'Сейсенбі', 'Сәрсенбі', 'Бейсенбі', 'Жұма', 'Сенбі'];
 
   // --- ЗАГРУЗКА ДАННЫХ ---
@@ -39,16 +40,17 @@ const TimetableDisplay = () => {
     fetchData();
   }, []);
 
-  // Фильтрация
+  // Фильтрация по смене
   const filteredClasses = useMemo(() => {
     return classes.filter(c => c.shift === currentShift)
   }, [currentShift, classes])
 
+  // Сброс страницы при смене фильтра
   useEffect(() => {
     setCurrentStartIndex(0)
   }, [currentShift])
 
-  // Авто-ротация
+  // Авто-ротация страниц
   useEffect(() => {
     if (filteredClasses.length === 0) return
     const interval = setInterval(() => {
@@ -57,7 +59,7 @@ const TimetableDisplay = () => {
     return () => clearInterval(interval)
   }, [filteredClasses.length])
 
-  // Время
+  // Обновление времени
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date())
@@ -65,6 +67,7 @@ const TimetableDisplay = () => {
     return () => clearInterval(interval)
   }, [])
 
+  // Форматирование
   const formatTime = (date) => {
     return date.toLocaleTimeString('kk-KZ', {
       hour: '2-digit', minute: '2-digit', hour12: false
@@ -89,7 +92,7 @@ const TimetableDisplay = () => {
   const totalPages = Math.ceil(filteredClasses.length / visibleCount) || 1
   const currentPage = Math.floor(currentStartIndex / visibleCount)
 
-  // --- ЭКРАНЫ ЗАГРУЗКИ/ОШИБКИ ---
+  // --- ЭКРАН ЗАГРУЗКИ ---
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center">
@@ -101,6 +104,7 @@ const TimetableDisplay = () => {
     )
   }
 
+  // --- ЭКРАН ОШИБКИ ---
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center">
@@ -166,7 +170,7 @@ const TimetableDisplay = () => {
           </div>
         </div>
 
-        {/* КНОПКИ ДНЕЙ НЕДЕЛИ */}
+        {/* КНОПКИ ДНЕЙ НЕДЕЛИ (Казахский) */}
         <div className="flex gap-3 flex-wrap mt-4 border-t border-white/10 pt-5 justify-center md:justify-start">
           {displayDays.map((dayName, index) => (
             <button
@@ -198,7 +202,7 @@ const TimetableDisplay = () => {
                 key={`${cls.name}-${idx}`}
                 className="bg-white/10 backdrop-blur-sm rounded-2xl p-5 shadow-xl border border-white/10 hover:bg-white/15 transition-all flex flex-col h-full"
               >
-                {/* ЗАГОЛОВОК КАРТОЧКИ */}
+                {/* ЗАГОЛОВОК КАРТОЧКИ: Крупный, без кружка */}
                 <div className="flex items-center justify-between mb-4 border-b border-white/20 pb-3">
                   <div>
                       <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-wider pl-1 drop-shadow-md">
@@ -219,12 +223,12 @@ const TimetableDisplay = () => {
                     schedule.map((lesson, i) => (
                       <div key={i} className="flex items-center gap-4 group bg-black/20 p-3 rounded-xl border border-transparent hover:border-white/20 transition-all">
                         
-                        {/* Время (УВЕЛИЧЕНО) */}
+                        {/* Время (Крупное) */}
                         <div className="min-w-[100px] md:min-w-[110px] bg-blue-600 group-hover:bg-blue-500 text-white rounded-lg py-2 px-1 font-mono text-base md:text-lg font-bold text-center shadow-lg transition-colors border border-blue-400/30 flex items-center justify-center self-stretch">
                           {lesson.time}
                         </div>
                         
-                        {/* Предмет и детали (УВЕЛИЧЕНО) */}
+                        {/* Предмет и детали (Крупные) */}
                         <div className="flex-1 min-w-0 py-0.5">
                           <div className="text-lg md:text-xl text-white font-bold leading-tight break-words drop-shadow-sm">
                             {lesson.subject}
