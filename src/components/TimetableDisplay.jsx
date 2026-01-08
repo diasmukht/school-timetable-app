@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { Clock, Calendar, Sun, Moon, Loader2 } from 'lucide-react'
 
 // --- ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ С NPOINT.IO ---
-const DATA_URL = 'https://api.npoint.io/6bc04583502766e44c7a'; 
+const DATA_URL = 'https://api.npoint.io/ВАШ_ID_СЮДА'; 
 
 const TimetableDisplay = () => {
   // Состояния данных
@@ -16,10 +16,9 @@ const TimetableDisplay = () => {
   const [currentDay, setCurrentDay] = useState(0)
   const [currentTime, setCurrentTime] = useState(new Date())
 
-  // Дни для поиска в JSON (должны совпадать с ключами в вашем файле)
+  // Дни для поиска в JSON
   const dataDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  
-  // Дни для отображения на экране (Казахский)
+  // Дни для отображения (Казахский)
   const displayDays = ['Дүйсенбі', 'Сейсенбі', 'Сәрсенбі', 'Бейсенбі', 'Жұма', 'Сенбі'];
 
   // --- ЗАГРУЗКА ДАННЫХ ---
@@ -40,17 +39,16 @@ const TimetableDisplay = () => {
     fetchData();
   }, []);
 
-  // Фильтрация по смене
+  // Фильтрация
   const filteredClasses = useMemo(() => {
     return classes.filter(c => c.shift === currentShift)
   }, [currentShift, classes])
 
-  // Сброс страницы при смене фильтра
   useEffect(() => {
     setCurrentStartIndex(0)
   }, [currentShift])
 
-  // Авто-ротация страниц
+  // Авто-ротация
   useEffect(() => {
     if (filteredClasses.length === 0) return
     const interval = setInterval(() => {
@@ -59,7 +57,7 @@ const TimetableDisplay = () => {
     return () => clearInterval(interval)
   }, [filteredClasses.length])
 
-  // Обновление времени
+  // Время
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date())
@@ -67,7 +65,6 @@ const TimetableDisplay = () => {
     return () => clearInterval(interval)
   }, [])
 
-  // Форматирование даты и времени
   const formatTime = (date) => {
     return date.toLocaleTimeString('kk-KZ', {
       hour: '2-digit', minute: '2-digit', hour12: false
@@ -92,25 +89,24 @@ const TimetableDisplay = () => {
   const totalPages = Math.ceil(filteredClasses.length / visibleCount) || 1
   const currentPage = Math.floor(currentStartIndex / visibleCount)
 
-  // --- ЭКРАН ЗАГРУЗКИ ---
+  // --- ЭКРАНЫ ЗАГРУЗКИ/ОШИБКИ ---
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center">
          <div className="text-white text-center">
-            <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-300" />
-            <p className="text-xl font-medium">Кесте жүктелуде...</p>
+            <Loader2 className="w-16 h-16 animate-spin mx-auto mb-4 text-blue-300" />
+            <p className="text-2xl font-medium">Кесте жүктелуде...</p>
          </div>
       </div>
     )
   }
 
-  // --- ЭКРАН ОШИБКИ ---
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center">
-         <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl text-white text-center border border-red-400/30">
-            <p className="text-xl font-bold mb-2 text-red-300">Қате!</p>
-            <p>{error}</p>
+         <div className="bg-white/10 backdrop-blur-md p-10 rounded-2xl text-white text-center border border-red-400/30">
+            <p className="text-2xl font-bold mb-2 text-red-300">Қате!</p>
+            <p className="text-lg">{error}</p>
          </div>
       </div>
     )
@@ -118,68 +114,68 @@ const TimetableDisplay = () => {
 
   // --- ОСНОВНОЙ РЕНДЕР ---
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 p-4 md:p-6">
       <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 mb-6 shadow-2xl border border-white/20">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-6 gap-4">
           <div>
-            <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">Сабақ кестесі</h1>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tight">Сабақ кестесі</h1>
             
             {/* Смены */}
-            <div className="flex bg-blue-950/50 p-1 rounded-xl w-fit border border-white/10">
+            <div className="flex bg-blue-950/50 p-1.5 rounded-xl w-fit border border-white/10">
               <button
                 onClick={() => setCurrentShift('morning')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium text-sm md:text-base ${
+                className={`flex items-center gap-3 px-6 py-3 rounded-lg transition-all font-bold text-base md:text-lg ${
                   currentShift === 'morning' 
                     ? 'bg-blue-500 text-white shadow-lg' 
                     : 'text-blue-200 hover:text-white'
                 }`}
               >
-                <Sun className="w-4 h-4" />
-                Таңертең (1 ауысым)
+                <Sun className="w-6 h-6" />
+                Таңертең
               </button>
               <button
                 onClick={() => setCurrentShift('afternoon')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium text-sm md:text-base ${
+                className={`flex items-center gap-3 px-6 py-3 rounded-lg transition-all font-bold text-base md:text-lg ${
                   currentShift === 'afternoon' 
                     ? 'bg-indigo-500 text-white shadow-lg' 
                     : 'text-blue-200 hover:text-white'
                 }`}
               >
-                <Moon className="w-4 h-4" />
-                Күндіз (2 ауысым)
+                <Moon className="w-6 h-6" />
+                Күндіз
               </button>
             </div>
           </div>
 
           <div className="text-right w-full md:w-auto flex flex-row md:flex-col justify-between items-end">
-            <div className="flex items-center gap-3 text-white mb-1">
-              <Clock className="w-5 h-5 md:w-6 md:h-6" />
-              <span className="text-xl md:text-2xl font-bold">{formatTime(currentTime)}</span>
+            <div className="flex items-center gap-4 text-white mb-1">
+              <Clock className="w-8 h-8 md:w-10 md:h-10" />
+              <span className="text-3xl md:text-5xl font-bold font-mono tracking-wider">{formatTime(currentTime)}</span>
             </div>
             <div className="flex flex-col items-end">
-              <div className="flex items-center gap-2 text-blue-200">
-                <Calendar className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="text-sm md:text-base capitalize">{formatDate(currentTime)}</span>
+              <div className="flex items-center gap-2 text-blue-100">
+                <Calendar className="w-5 h-5 md:w-6 md:h-6" />
+                <span className="text-lg md:text-xl capitalize font-medium">{formatDate(currentTime)}</span>
               </div>
-              <p className="text-xs md:text-sm text-blue-300 mt-2 hidden md:block">
+              <p className="text-sm md:text-base text-blue-300 mt-2 hidden md:block opacity-80">
                 Бет {currentPage + 1} / {totalPages}
               </p>
             </div>
           </div>
         </div>
 
-        {/* КНОПКИ ДНЕЙ НЕДЕЛИ (Казахский) */}
-        <div className="flex gap-2 flex-wrap mt-4 border-t border-white/10 pt-4 justify-center md:justify-start">
+        {/* КНОПКИ ДНЕЙ НЕДЕЛИ */}
+        <div className="flex gap-3 flex-wrap mt-4 border-t border-white/10 pt-5 justify-center md:justify-start">
           {displayDays.map((dayName, index) => (
             <button
               key={dayName}
               onClick={() => setCurrentDay(index)}
-              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg font-semibold text-xs md:text-lg transition-all ${
+              className={`px-5 py-2.5 rounded-xl font-bold text-sm md:text-xl transition-all ${
                 currentDay === index
-                  ? 'bg-white text-blue-900 shadow-md scale-105'
-                  : 'bg-white/20 text-white hover:bg-white/30'
+                  ? 'bg-white text-blue-900 shadow-lg scale-105 ring-2 ring-blue-300'
+                  : 'bg-white/10 text-white hover:bg-white/20'
               }`}
             >
               {dayName}
@@ -190,48 +186,62 @@ const TimetableDisplay = () => {
 
       {/* Сетка расписания */}
       {filteredClasses.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
           {visibleClasses.map((cls, idx) => {
             if (!cls) return null;
             
-            // Используем dataDays для поиска данных, чтобы не ломать логику JSON
             const currentDayKey = dataDays[currentDay];
             const schedule = cls.timetable[currentDayKey] || [];
             
             return (
               <div
                 key={`${cls.name}-${idx}`}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-white/10 hover:bg-white/15 transition-all"
+                className="bg-white/10 backdrop-blur-sm rounded-2xl p-5 shadow-xl border border-white/10 hover:bg-white/15 transition-all flex flex-col h-full"
               >
-                {/* ЗАГОЛОВОК КАРТОЧКИ: Кружок убран, текст увеличен */}
-                <div className="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
+                {/* ЗАГОЛОВОК КАРТОЧКИ */}
+                <div className="flex items-center justify-between mb-4 border-b border-white/20 pb-3">
                   <div>
-                      <h2 className="text-2xl md:text-3xl font-bold text-white uppercase tracking-wide pl-1">
-                        {cls.name} <span className="text-blue-200 text-lg font-normal normal-case">сыныбы</span>
+                      <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-wider pl-1 drop-shadow-md">
+                        {cls.name} <span className="text-blue-200 text-xl md:text-2xl font-medium normal-case ml-1">сыныбы</span>
                       </h2>
                   </div>
-                  <div className="text-xs font-bold text-blue-900 bg-white/90 px-3 py-1 rounded-full">
+                  <div className="text-sm font-bold text-blue-900 bg-white px-3 py-1.5 rounded-lg shadow-sm">
                    {schedule.length} сабақ
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-3 flex-1">
                   {schedule.length === 0 ? (
-                    <p className="text-blue-200 italic p-4 text-center text-sm">Бұл күнде сабақ жоқ.</p>
+                    <div className="flex flex-col items-center justify-center h-full min-h-[200px] text-blue-200/60">
+                       <p className="text-lg italic">Бұл күнде сабақ жоқ</p>
+                    </div>
                   ) : (
                     schedule.map((lesson, i) => (
-                      <div key={i} className="flex items-start gap-3 group bg-black/20 p-2 rounded-lg border border-transparent hover:border-white/10 transition-colors">
-                        {/* Время */}
-                        <div className="min-w-[70px] bg-blue-600/80 group-hover:bg-blue-500 text-white rounded-md py-1 px-1 font-mono text-xs md:text-sm text-center shadow-sm transition-colors border border-blue-400/30 flex items-center justify-center h-full">
+                      <div key={i} className="flex items-center gap-4 group bg-black/20 p-3 rounded-xl border border-transparent hover:border-white/20 transition-all">
+                        
+                        {/* Время (УВЕЛИЧЕНО) */}
+                        <div className="min-w-[100px] md:min-w-[110px] bg-blue-600 group-hover:bg-blue-500 text-white rounded-lg py-2 px-1 font-mono text-base md:text-lg font-bold text-center shadow-lg transition-colors border border-blue-400/30 flex items-center justify-center self-stretch">
                           {lesson.time}
                         </div>
-                        {/* Предмет */}
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm md:text-base text-white font-semibold leading-tight break-words">
+                        
+                        {/* Предмет и детали (УВЕЛИЧЕНО) */}
+                        <div className="flex-1 min-w-0 py-0.5">
+                          <div className="text-lg md:text-xl text-white font-bold leading-tight break-words drop-shadow-sm">
                             {lesson.subject}
                           </div>
-                          {lesson.teacher && <div className="text-xs text-blue-200 mt-0.5 truncate">{lesson.teacher}</div>}
-                          {lesson.room && <div className="text-[10px] text-white/50 mt-0.5">Каб. {lesson.room}</div>}
+                          
+                          <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1.5 items-center">
+                            {lesson.teacher && (
+                                <span className="text-sm md:text-base text-blue-100 font-medium bg-blue-500/10 px-1.5 rounded">
+                                    {lesson.teacher}
+                                </span>
+                            )}
+                            {lesson.room && (
+                                <span className="text-xs md:text-sm text-white/70 font-mono bg-white/10 px-1.5 rounded border border-white/10">
+                                    Каб. {lesson.room}
+                                </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))
@@ -242,26 +252,26 @@ const TimetableDisplay = () => {
           })}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center mt-20 opacity-70">
-          <div className="bg-white/10 p-6 rounded-full mb-4">
-             <Sun className="w-12 h-12 text-yellow-300" />
+        <div className="flex flex-col items-center justify-center mt-20 opacity-80">
+          <div className="bg-white/10 p-8 rounded-full mb-6 ring-4 ring-white/5">
+             <Sun className="w-16 h-16 text-yellow-300 animate-pulse" />
           </div>
-          <div className="text-center text-white text-xl font-medium">
+          <div className="text-center text-white text-2xl font-bold">
              Таңдалған ауысымға сабақ кестесі жоқ
           </div>
         </div>
       )}
 
       {/* Индикаторы страниц */}
-      <div className="flex justify-center items-center gap-3 pb-8">
+      <div className="flex justify-center items-center gap-4 pb-8 mt-4">
         {Array.from({ length: totalPages }).map((_, pageIndex) => (
           <button
             key={pageIndex}
             onClick={() => setCurrentStartIndex(pageIndex * visibleCount)}
-            className={`h-3 rounded-full transition-all ${
+            className={`rounded-full transition-all duration-300 ${
               pageIndex === currentPage 
-                ? 'w-8 bg-white shadow-lg' 
-                : 'w-3 bg-white/30 hover:bg-white/50'
+                ? 'w-10 h-4 bg-white shadow-[0_0_15px_rgba(255,255,255,0.5)]' 
+                : 'w-4 h-4 bg-white/20 hover:bg-white/40'
             }`}
             aria-label={`Go to page ${pageIndex + 1}`}
           />
