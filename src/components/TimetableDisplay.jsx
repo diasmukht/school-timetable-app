@@ -15,7 +15,7 @@ const TimetableDisplay = () => {
   const [currentDay, setCurrentDay] = useState(0)
   const [currentTime, setCurrentTime] = useState(new Date())
 
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  const days = ['Дүйсеньі', 'Сейсенбі', 'Сәрсенбі', 'Бейсенбі', 'Жұма', 'Сенбі']
 
 
   useEffect(() => {
