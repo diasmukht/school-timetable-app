@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { Clock, Calendar, Sun, Moon, Loader2 } from 'lucide-react'
 
 // ВАША ССЫЛКА (Точно как вы прислали)
-const DATA_URL = 'https://api.npoint.io/6bc04583502766e44c7a'; 
+const DATA_URL = 'https://api.npoint.io/6dec92e0172eba4477dd'; 
 
 const TimetableDisplay = () => {
   // --- Состояния данных ---
