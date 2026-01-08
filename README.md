@@ -15,3 +15,7 @@ Open the URL printed by Vite (usually http://localhost:5173) in the browser. For
 Files of interest:
 - `src/components/TimetableDisplay.jsx` — the main component (provided timetable + auto-rotate).
 - `index.html`, `src/main.jsx`, `src/index.css` — app entry and styles.
+
+passw - ZADCvAY2Dn9C!vw
+login - qwerty1526
+link - https://api.npoint.io/6bc04583502766e44c7a
